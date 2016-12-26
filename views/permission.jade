@@ -1,0 +1,82 @@
+extends layout
+block content
+    table(width="100%", height="100%", border="0", cellspacing="0", cellpadding="0" ng-app="UserPermission")
+      tr
+        td.header(height="1")
+          table(width="1100", border="0", align="center", cellpadding="0", cellspacing="0")
+            tr
+              td(width="221")
+                img(src="/images/logo.png", width="221", height="72")
+              td(width="879", align="right")
+                | Welcome
+                strong Administrator
+                <!-- a.logout-button(href="#") Logout &#62;&#62; -->
+      tr
+        td(valign="top" ng-controller="permissionController")
+          table(width="1100", border="0", align="center", cellpadding="0", cellspacing="30")
+            tr
+              td(valign="top")
+                <!-- This is detail profile section -->
+                div
+                | &nbsp;
+                p
+                  a(href="/")
+                    input#btnManageUsers.submit-button(type="button", value="Manage Users", name="btnManageUsers")
+
+              td(valign="top")
+                table(width="450", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td
+                      h2 Permission Search
+                  tr
+                    td
+                      table.box(width="100%", border="0", cellspacing="0", cellpadding="0")
+                        tr
+                          td
+                            strong Name
+                            | :
+                            label(for="textfield")
+                            input#textfield.searchbox(type='text', placeholder='Name' name='inputSearchname' ng-model="searchText")
+                            <!-- input#button.submit-button(type="submit", name="button", value="Search") -->
+                table(width="450", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td &#160;
+                  tr
+                    td
+                      h2 Permission List
+                  tr
+                    td
+                      table.data-table(width="100%", border="0", cellspacing="0", cellpadding="0")
+                        tr
+                          th(width="26%", align="left") Name
+                          th(width="22%") Actions
+                        tr(ng-repeat='permission in permissions | filter:searchText')
+                          td
+                           {{permission.name}}
+                          td(align="center")
+                            a(href="javascript:void(0)" ng-click="editPermission(permission)") Edit
+                            |   / 
+                            a(href="javascript:void(0)" ng-click="deletePermission(permission._id)") Delete
+              td(valign="top")
+                table(width="250", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td
+                      h2 Permission Form
+                  tr
+                    td
+                      form(novalidate='novalidate' name='permissionForm' class='css-form')
+                          input#inputPermissionId(type='text' ng-model='permissionFormData._id' style='display:none;')
+                          table.box(width="100%", border="0", cellspacing="0", cellpadding="0")
+                            tr
+                              td(valign="top")
+                                p
+                                  strong Permission Name
+                                  | :
+                                  br
+                                  input#inputPermissionname.textbox1(type='text', placeholder='Permission Name' ng-model='permissionFormData.name' name='name' required)
+                                  s(ng-show='permissionForm.name.$dirty && permissionForm.name.$error.required' class='error') Please Enter Permission Name.
+                                p
+                                  button#btnAddPermission.submit-button(ng-click='savePermission()' ng-disabled="permissionForm.$invalid") Save
+                                  &nbsp;
+                                  button#btnCancelPermission.submit-button(ng-click='cancel()') Cancel
+    script(src='/javascripts/permission.js')

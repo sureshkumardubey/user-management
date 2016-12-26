@@ -1,0 +1,154 @@
+extends layout
+block content
+    table(width="100%", height="100%", border="0", cellspacing="0", cellpadding="0" ng-app="UserManagement")
+      tr
+        td.header(height="1")
+          table(width="1100", border="0", align="center", cellpadding="0", cellspacing="0")
+            tr
+              td(width="221")
+                img(src="images/logo.png", width="221", height="72")
+              td(width="879", align="right")
+                | Welcome 
+                strong Administrator
+                <!-- a.logout-button(href="#") Logout &#62;&#62; -->
+      tr
+        td(valign="top" ng-controller="userController")
+          table(width="1100", border="0", align="center", cellpadding="0", cellspacing="30")
+            tr
+              td(valign="top")
+                table(width="300", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td
+                      h2 Detail Profile
+                  tr
+                    td
+                      table.box(width="100%", border="0", cellspacing="0", cellpadding="0", style="height:350px")
+                        tr
+                          td(valign="top")
+                            p
+                              strong Name 
+                              | :
+                              br
+                              | <span id='userInfoName'>{{usserInfo.firstname}} {{usserInfo.lastname}}</span>
+                            p
+                              strong Email :
+                              br
+                              | <span id='userInfoEmail'>{{usserInfo.email}}</span>
+                            p
+                              strong Age : 
+                              br
+                              | <span id='userInfoAge'>{{usserInfo.age}}</span>
+                            p
+                              strong Password :
+                              br
+                              | <span id='userInfoPassword'>{{usserInfo.password}}</span>
+                            p
+                              strong Permission :
+                              br
+                              | <span id='userInfoPermissions'>{{usserInfo.permissions}}</span>
+                            p
+                              strong Sex :
+                              br
+                              | <span id='userInfoSex'>{{usserInfo.sex}}</span>
+                            p
+                              a(href="permissions")
+                                input#btnManagePermissions.submit-button(type="button", value="Manage Permissions", name="btnManagePermissions")
+
+
+                              
+              td(valign="top")
+                table(width="450", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td
+                      h2 User Search
+                  tr
+                    td
+                      table.box(width="100%", border="0", cellspacing="0", cellpadding="0")
+                        tr
+                          td
+                            strong Name 
+                            | :
+                            label(for="textfield")
+                            input#textfield.searchbox(type='text', placeholder='Name' name='inputSearchname' ng-model="searchText")
+                            <!-- input#button.submit-button(type="submit", name="button", value="Search") -->
+                table(width="450", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td &#160;
+                  tr
+                    td
+                      h2 User List
+                  tr
+                    td
+                      table.data-table(width="100%", border="0", cellspacing="0", cellpadding="0")
+                        tr
+                          th(width="26%", align="left") Name 
+                          th(width="52%", align="left") Email 
+                          th(width="22%") Actions
+                        tr(ng-repeat='user in users | filter:searchText')
+                          td
+                            a(href="javascript:void(0)" title="Show Details" ng-click="showUserInfo(user)") {{user.firstname}} {{user.lastname}}
+                          td {{user.email}}
+                          td(align="center")
+                            a(href="javascript:void(0)" ng-click="editUser(user)") Edit
+                            |  / 
+                            a(href="javascript:void(0)" ng-click="deleteUser(user._id)") Delete
+              td(valign="top")
+                table(width="250", border="0", cellspacing="0", cellpadding="0")
+                  tr
+                    td
+                      h2 User Form
+                  tr
+                    td
+                      form(novalidate='novalidate' name='userForm' class='css-form')
+                          input#inputUserId(type='text' ng-model='userFormData._id' style='display:none;')
+                          table.box(width="100%", border="0", cellspacing="0", cellpadding="0", style="height:500px")
+                            tr
+                              td(valign="top")
+                                p
+                                  strong First Name
+                                  | :
+                                  br
+                                  input#inputUserFirstname.textbox1(type='text', placeholder='First Name' ng-model='userFormData.firstname' name='firstname' required)
+                                  s(ng-show='userForm.firstname.$dirty && userForm.firstname.$error.required' class='error') Please Enter First Name.
+                                p
+                                  strong Last Name :
+                                  br
+                                  input#inputUserLastname.textbox1(type='text', placeholder='LastName' ng-model='userFormData.lastname' name='lastname' required)
+                                  s(ng-show='userForm.lastname.$dirty && userForm.lastname.$error.required' class='error') Please Enter Last Name.
+                                p
+                                  strong Email :
+                                  br
+                                  input#inputUserEmail.textbox1(type='email', placeholder='Email' ng-model='userFormData.email' name='email' required)
+                                  d(ng-show='userForm.email.$dirty && userForm.email.$invalid' class='error') Invalid:
+                                      s(ng-show='userForm.email.$error.required' class='error') Tell us your email.
+                                      s(ng-show='userForm.email.$error.email' class='error') This is not a valid email
+                                p
+                                  strong Password :
+                                  br
+                                  input#inputUserPassword.textbox1(type='password', placeholder='Password' ng-model='userFormData.password' name='password' required)
+                                  s(ng-show='userForm.password.$dirty && userForm.password.$error.required' class='error') Please Enter Password.
+                                p
+                                  strong Age :
+                                  br
+                                  input#inputUserAge.textbox1(type='number', placeholder='Age', class='numeric' ng-model='userFormData.age' min='1' name='age' required)
+                                  s(ng-show='userForm.age.$dirty && userForm.age.$error.required' class='error') Please Enter Age.
+                                p
+                                  strong Permissions :
+                                  br
+                                  select#inputUserPermissions.textbox1(name="inputUserPermissions" multiple ng-model='userFormData.permissions' required)
+                                    <!-- option(value="") Select Permissions -->
+                                    each val in domPermissions
+                                        option(value="#{val.name}") #{val.name}
+                                  s(ng-show='userForm.inputUserPermissions.$dirty && userForm.inputUserPermissions.$error.required' class='error') Please Select Permission.
+                                p
+                                  strong Sex :
+                                  br
+                                  select#inputUserSex.textbox1(name="inputUserSex" ng-model='userFormData.sex' required)
+                                    option(value="Male") Male
+                                    option(value="Female") Female
+                                  s(ng-show='userForm.inputUserSex.$dirty && userForm.inputUserSex.$error.required' class='error') Please Select Sex.
+                                p
+                                  button#btnAddUser.submit-button(ng-click='saveUser()' ng-disabled="userForm.$invalid") Save User 
+                                  | 
+                                  button#btnCancelUser.submit-button(ng-click='cancel()') Cancel
+    script(src='/javascripts/angmain.js')
